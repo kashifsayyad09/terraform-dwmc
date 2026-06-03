@@ -1,0 +1,7 @@
+vpc_name = "VPC-TF"
+vpc_cidr = "10.0.0.0/16"
+subnet_cidr_a = "10.0.0.0/24"
+subnet_cidr_b = "10.0.1.0/24"
+aws_region = "us-east-1"
+az_a = "us-east-1a"
+az_b = "us-east-1b"
