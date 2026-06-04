@@ -24,7 +24,7 @@ variable "az_1a" {
 }
 
 variable "az_1c" {
-  description = "Availability Zone for subnet B"
+  description = "Availability Zone for subnet C"
   default     = ""
 }
 
