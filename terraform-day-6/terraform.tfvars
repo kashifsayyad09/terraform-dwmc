@@ -1,0 +1,17 @@
+vpc_cidr_block        = "10.0.0.0/16"
+subnet1_cidr_block    = "10.0.1.0/24"
+subnet2_cidr_block    = "10.0.2.0/24"
+subnet3_cidr_block    = "10.0.3.0/24"
+subnet4_cidr_block    = "10.0.4.0/24"
+az1                   = "us-east-1a"
+az2                   = "us-east-1b"
+aws_region            = "us-east-1"
+key_pair_name         = "my-key-pair"
+rds_instance_class    = "db.t3.micro"
+rds_username          = "admin"
+rds_password          = "password123"
+rds_db_name           = "mydb"
+rds_allocated_storage = 20
+ami_id                = "ami-00e801948462f718a"
+instance_type         = "t2.micro"
+instance_count        = 2

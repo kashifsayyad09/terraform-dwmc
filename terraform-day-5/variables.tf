@@ -38,3 +38,22 @@ variable "subnet_name3" {
   default     = ""
 }
 
+variable "rds_db_name" {
+  description = "Name of the RDS database"
+  default     = ""
+}
+
+variable "rds_username" {
+  description = "Username for the RDS database"
+  default     = ""
+}
+
+variable "rds_password" {
+  description = "Password for the RDS database"
+  default     = ""
+}
+
+variable "rds_instance_class" {
+  description = "Instance class for the RDS database"
+  default     = ""
+}
