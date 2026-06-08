@@ -1,5 +1,25 @@
 #############################################
-# IAM Role for Lambda
+# S3 Bucket
+#############################################
+
+resource "aws_s3_bucket" "lambda_bucket" {
+  bucket = "event-based-s3-zip"
+}
+
+#############################################
+# Upload Lambda ZIP
+#############################################
+
+resource "aws_s3_object" "lambda_zip" {
+  bucket = aws_s3_bucket.lambda_bucket.id
+  key    = "lambda_function.zip"
+  source = "${path.module}/lambda_function.zip"
+
+  etag = filemd5("${path.module}/lambda_function.zip")
+}
+
+#############################################
+# IAM Role
 #############################################
 
 resource "aws_iam_role" "lambda_exec" {
@@ -22,18 +42,11 @@ resource "aws_iam_role" "lambda_exec" {
   })
 }
 
-resource "aws_s3_object" "lambda_zip" {
-  bucket = "event-based-s3-zip"
-  key    = "lambda_function.zip"
-  source = "lambda_function.zip"
-
-  etag = filemd5("lambda_function.zip")
-}
 #############################################
-# Lambda Basic Execution Policy
+# CloudWatch Logs Permissions
 #############################################
 
-resource "aws_iam_role_policy_attachment" "lambda_logging" {
+resource "aws_iam_role_policy_attachment" "lambda_basic" {
   role       = aws_iam_role.lambda_exec.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
@@ -52,45 +65,56 @@ resource "aws_lambda_function" "example" {
   timeout     = 900
   memory_size = 128
 
-  s3_bucket = "event-based-s3-zip"
-  s3_key    = "lambda_function.zip"
+  s3_bucket = aws_s3_bucket.lambda_bucket.id
+  s3_key    = aws_s3_object.lambda_zip.key
 
   depends_on = [
-    aws_iam_role_policy_attachment.lambda_logging
+    aws_s3_object.lambda_zip,
+    aws_iam_role_policy_attachment.lambda_basic
   ]
 }
 
 #############################################
-# EventBridge Rule - Every 5 Minutes
+# EventBridge Rule Every 5 Minutes
 #############################################
 
 resource "aws_cloudwatch_event_rule" "every_five_minutes" {
-  name        = "every-five-minutes"
-  description = "Trigger Lambda every 5 minutes"
-
-  schedule_expression = "rate(5 minutes)"
+  name                = "every-five-minutes"
+  description         = "Run Lambda every 5 minutes"
+  schedule_expression = "cron(0/5 * * * ? *)"
 }
 
 #############################################
 # EventBridge Target
 #############################################
 
-resource "aws_cloudwatch_event_target" "invoke_lambda" {
+resource "aws_cloudwatch_event_target" "lambda_target" {
   rule      = aws_cloudwatch_event_rule.every_five_minutes.name
-  target_id = "lambda"
+  target_id = "LambdaTarget"
   arn       = aws_lambda_function.example.arn
 }
 
 #############################################
-# Permission for EventBridge to Invoke Lambda
+# Lambda Permission
 #############################################
 
 resource "aws_lambda_permission" "allow_eventbridge" {
   statement_id  = "AllowExecutionFromEventBridge"
   action        = "lambda:InvokeFunction"
-
   function_name = aws_lambda_function.example.function_name
 
   principal  = "events.amazonaws.com"
   source_arn = aws_cloudwatch_event_rule.every_five_minutes.arn
+}
+
+#############################################
+# Outputs
+#############################################
+
+output "bucket_name" {
+  value = aws_s3_bucket.lambda_bucket.bucket
+}
+
+output "lambda_name" {
+  value = aws_lambda_function.example.function_name
 }
