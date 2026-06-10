@@ -104,3 +104,4 @@ resource "aws_elasticache_serverless_cache" "redis_serverless" {
   ]
   depends_on = [aws_db_instance.name]
 }
+
