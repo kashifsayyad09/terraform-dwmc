@@ -17,3 +17,11 @@ variable "name" {
   description = "The name to use for the instance"
   type        = string
 }
+
+variable "subnet_id" {
+  type = string
+}
+
+variable "security_group_id" {
+  type = string
+}
