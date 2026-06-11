@@ -28,3 +28,25 @@ resource "aws_security_group" "name" {
     name = var.sg-name
   }
 }
+#for rds
+resource "aws_security_group" "name2" {
+  vpc_id = var.vpc_id
+
+  ingress {
+    description = "RDS"
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    description = "Allow all outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    name = var.sg-rds
+  }
+}

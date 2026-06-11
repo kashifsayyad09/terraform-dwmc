@@ -16,6 +16,42 @@ variable "subnet_cidr2" {
   default = ""
 }
 
+variable "subnet_cidr3" {
+  description = "subnet3 cidr block"
+  type = string
+  default = ""
+}
+
+variable "subnet_cidr4" {
+  description = "subnet4 cidr block"
+  type = string
+  default = ""
+}
+
+variable "subnet_cidr5" {
+  description = "subnet5 cidr block"
+  type = string
+  default = ""
+}
+
+variable "subnet_cidr6" {
+  description = "subnet6 cidr block"
+  type = string
+  default = ""
+}
+
+variable "subnet_cidr7" {
+  description = "subnet7 cidr block"
+  type = string
+  default = ""
+}
+
+variable "subnet_cidr8" {
+  description = "subnet8 cidr block"
+  type = string
+  default = ""
+}
+
 variable "az1" {
   description = "avaliability Zone-1a"
   type = string

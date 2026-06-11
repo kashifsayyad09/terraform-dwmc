@@ -6,3 +6,7 @@ variable "sg-name" {
 variable "vpc_id" {
   type = string
 }
+
+variable "sg-rds" {
+  type = string
+}

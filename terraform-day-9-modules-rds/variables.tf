@@ -25,6 +25,30 @@ variable "rds_tag" {
   type = string
   default = ""
 } 
+variable "rds_subnet_group" {
+  description = "subnet group"
+  type = string
+  default = "subnet-group"
+}
+variable "subnet_ids" {
+  description = "subnet ids"
+  type = list(string)
+  default = ["subnet7_id", "subnet8_id"]
+}
 
+variable "rds_security_group" {
+  description = "security group"
+  type = string
+  default = ""
+}
+variable "sg_id" {
+  description = "security group id"
+  type = string
+  default = "sg_id"
+}
 
-
+variable "rds_vpc_id" {
+  description = "vpc id"
+  type = string
+  default = ""
+}
