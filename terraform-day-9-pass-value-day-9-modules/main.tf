@@ -41,7 +41,10 @@ module "rds" {
   rds_password = "Root1234"
   rds_instance_class ="db.t3.micro"
   rds_tag = "Db-21"
-  rds_subnet_group = "mydb-subnet-group"
+  rds_subnet_group = "mydb-subnet-group" 
   rds_security_group = module.securitygroup.rds_sg_id
-  
+    subnet_ids = [
+    module.vpc.subnet7_id,
+    module.vpc.subnet8_id
+  ]
 }

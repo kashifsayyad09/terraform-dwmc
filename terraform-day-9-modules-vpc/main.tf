@@ -13,7 +13,7 @@ resource "aws_subnet" "subnet1" {
   #subnet public true
   map_public_ip_on_launch = true
   tags = {
-    name = "public-1"
+    Name = "public-1"
   }
 }
 
@@ -23,7 +23,7 @@ resource "aws_subnet" "subnet2" {
   availability_zone = var.az2
   map_public_ip_on_launch = true
   tags = {
-   name = "public-2" 
+   Name = "public-2" 
   }
 }
 
@@ -32,7 +32,7 @@ resource "aws_subnet" "subnet3" {
   cidr_block = var.subnet_cidr3
   availability_zone = var.az1
   tags = {
-   name = "private-frontend-1" 
+   Name = "private-frontend-1" 
   }
 } 
 
@@ -41,7 +41,7 @@ resource "aws_subnet" "subnet4" {
   cidr_block = var.subnet_cidr4
   availability_zone = var.az2
   tags = {
-   name = "private-frontend-2"
+   Name = "private-frontend-2"
   }
 }
 
@@ -50,7 +50,7 @@ resource "aws_subnet" "subnet5" {
   cidr_block = var.subnet_cidr5
   availability_zone = var.az1
   tags = {
-   name = "private-backend-1"
+   Name = "private-backend-1"
   }
 }
 
@@ -59,7 +59,7 @@ resource "aws_subnet" "subnet6" {
   cidr_block = var.subnet_cidr6
   availability_zone = var.az2
   tags = {
-   name = "private-backend-2"
+   Name = "private-backend-2"
   }
 }
 
@@ -68,7 +68,7 @@ resource "aws_subnet" "subnet7" {
   cidr_block = var.subnet_cidr7
   availability_zone = var.az1
   tags = {
-   name = "DB-1"
+   Name = "DB-1"
   }
 }
 
@@ -77,7 +77,7 @@ resource "aws_subnet" "subnet8" {
   cidr_block = var.subnet_cidr8
   availability_zone = var.az2
   tags = {
-   name = "DB-2"
+   Name = "DB-2"
   }
 }
 

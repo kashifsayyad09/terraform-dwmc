@@ -33,7 +33,8 @@ variable "rds_subnet_group" {
 variable "subnet_ids" {
   description = "subnet ids"
   type = list(string)
-  default = ["subnet7_id", "subnet8_id"]
+  #default = ["subnet7_id", "subnet8_id"]
+  default = [ "" ]
 }
 
 variable "rds_security_group" {
