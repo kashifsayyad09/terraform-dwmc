@@ -155,7 +155,51 @@ resource "aws_iam_role" "lambda_exec" {
     ]
   })
 }
+#--------------------------------------------------------
 
+resource "aws_s3_bucket_policy" "cloudwatch_export" {
+  bucket = aws_s3_bucket.example.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Sid    = "AWSCloudWatchAclCheck"
+        Effect = "Allow"
+
+        Principal = {
+          Service = "logs.us-east-1.amazonaws.com"
+        }
+
+        Action = "s3:GetBucketAcl"
+
+        Resource = aws_s3_bucket.example.arn
+      },
+
+      {
+        Sid    = "AWSCloudWatchWrite"
+        Effect = "Allow"
+
+        Principal = {
+          Service = "logs.us-east-1.amazonaws.com"
+        }
+
+        Action = "s3:PutObject"
+
+        Resource = "${aws_s3_bucket.example.arn}/*"
+
+        Condition = {
+          StringEquals = {
+            "s3:x-amz-acl" = "bucket-owner-full-control"
+          }
+        }
+      }
+    ]
+  })
+}
+
+#--------------------------------------------------------
 resource "aws_iam_role_policy_attachment" "lambda_policies" {
   for_each = toset([
     "arn:aws:iam::aws:policy/AmazonS3FullAccess",
@@ -181,6 +225,21 @@ resource "aws_lambda_permission" "lambda_permission" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda_function.function_name
   principal     = "s3.amazonaws.com"
+  source_arn    = aws_s3_bucket.example.arn
+}
+
+
+resource "aws_s3_bucket_notification" "bucket_notification" {
+  bucket = aws_s3_bucket.example.id
+
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.lambda_function.arn
+    events              = ["s3:ObjectCreated:*"]
+  }
+
+  depends_on = [
+    aws_lambda_permission.lambda_permission
+  ]
 }
 
 #################################################
@@ -194,3 +253,5 @@ output "instance_id" {
 output "public_ip" {
   value = aws_instance.ec2.public_ip
 }
+
+#aws s3 rm s3://terraformyasgdjsadlhksh --recursive
