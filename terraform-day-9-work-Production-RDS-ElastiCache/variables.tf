@@ -124,3 +124,11 @@ variable "redis_snapshot_retention_days" {
   default     = 7
 }
 
+
+
+variable "db_password" {
+  description = "password of rds"
+  type = string
+  default = ""
+}
+

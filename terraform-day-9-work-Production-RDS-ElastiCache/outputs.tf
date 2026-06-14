@@ -18,11 +18,11 @@ output "rds_read_replica_endpoint" {
   value       = aws_db_instance.read_replica.endpoint
 }
 
-output "rds_master_user_secret_arn" {
-  description = "Secrets Manager ARN containing the RDS master user password."
-  value       = aws_db_instance.primary.master_user_secret[0].secret_arn
-  sensitive   = true
-}
+# output "rds_master_user_secret_arn" {
+#   description = "Secrets Manager ARN containing the RDS master user password."
+#   value       = aws_db_instance.primary.master_user_secret[0].secret_arn
+#   sensitive   = true
+# }
 
 output "redis_primary_endpoint" {
   description = "Primary Redis endpoint."
@@ -34,9 +34,10 @@ output "redis_reader_endpoint" {
   value       = aws_elasticache_replication_group.redis.reader_endpoint_address
 }
 
-output "redis_auth_token_secret_arn" {
-  description = "Secrets Manager ARN containing the Redis auth token."
-  value       = aws_secretsmanager_secret.redis_auth_token.arn
-  sensitive   = true
-}
+# output "redis_auth_token_secret_arn" {
+#   description = "Secrets Manager ARN containing the Redis auth token."
+#   value       = aws_secretsmanager_secret.redis_auth_token.arn
+#   sensitive   = true
+# }
+
 

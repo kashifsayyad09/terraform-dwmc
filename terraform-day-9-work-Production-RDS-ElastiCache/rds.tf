@@ -55,7 +55,10 @@ resource "aws_db_instance" "primary" {
   publicly_accessible    = false
   multi_az               = true
 
-  manage_master_user_password = true
+  #manage_master_user_password = true
+  
+  password = var.db_password
+  
   parameter_group_name        = aws_db_parameter_group.mysql.name
 
   backup_retention_period   = var.db_backup_retention_days
@@ -69,8 +72,8 @@ resource "aws_db_instance" "primary" {
   enabled_cloudwatch_logs_exports = ["error", "slowquery"]
   monitoring_interval             = 60
   monitoring_role_arn             = aws_iam_role.rds_monitoring.arn
-  performance_insights_enabled    = true
-  performance_insights_kms_key_id = aws_kms_key.data.arn
+  performance_insights_enabled    = false
+  #performance_insights_kms_key_id = aws_kms_key.data.arn
 
   auto_minor_version_upgrade = true
   apply_immediately          = false
@@ -100,8 +103,8 @@ resource "aws_db_instance" "read_replica" {
   enabled_cloudwatch_logs_exports = ["error", "slowquery"]
   monitoring_interval             = 60
   monitoring_role_arn             = aws_iam_role.rds_monitoring.arn
-  performance_insights_enabled    = true
-  performance_insights_kms_key_id = aws_kms_key.data.arn
+  performance_insights_enabled    = false
+  #performance_insights_kms_key_id = aws_kms_key.data.arn
 
   auto_minor_version_upgrade = true
   apply_immediately          = false

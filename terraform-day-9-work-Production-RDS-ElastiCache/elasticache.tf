@@ -4,21 +4,6 @@ resource "random_password" "redis_auth_token" {
   override_special = "!&#$^<>-"
 }
 
-resource "aws_secretsmanager_secret" "redis_auth_token" {
-  name                    = "${local.name_prefix}/redis/auth-token"
-  kms_key_id              = aws_kms_key.data.arn
-  recovery_window_in_days = 30
-
-  tags = {
-    Name = "${local.name_prefix}-redis-auth-token"
-  }
-}
-
-resource "aws_secretsmanager_secret_version" "redis_auth_token" {
-  secret_id     = aws_secretsmanager_secret.redis_auth_token.id
-  secret_string = random_password.redis_auth_token.result
-}
-
 resource "aws_elasticache_parameter_group" "redis" {
   name   = "${local.name_prefix}-redis7"
   family = "redis7"
@@ -26,6 +11,16 @@ resource "aws_elasticache_parameter_group" "redis" {
   parameter {
     name  = "maxmemory-policy"
     value = "allkeys-lru"
+  }
+}
+
+resource "aws_cloudwatch_log_group" "redis_engine" {
+  name              = "/aws/elasticache/${local.name_prefix}/redis-engine"
+  retention_in_days = 30
+  kms_key_id        = aws_kms_key.data.arn
+
+  tags = {
+    Name = "${local.name_prefix}-redis-engine-logs"
   }
 }
 
@@ -38,6 +33,8 @@ resource "aws_elasticache_replication_group" "redis" {
   node_type      = var.redis_node_type
   port           = 6379
 
+  auth_token = random_password.redis_auth_token.result
+
   num_node_groups         = 1
   replicas_per_node_group = var.redis_replicas_per_node_group
 
@@ -48,7 +45,6 @@ resource "aws_elasticache_replication_group" "redis" {
   at_rest_encryption_enabled = true
   transit_encryption_enabled = true
   kms_key_id                 = aws_kms_key.data.arn
-  auth_token                 = random_password.redis_auth_token.result
 
   automatic_failover_enabled = true
   multi_az_enabled           = true
@@ -70,15 +66,13 @@ resource "aws_elasticache_replication_group" "redis" {
   tags = {
     Name = "${local.name_prefix}-redis"
   }
+
+  depends_on = [
+    aws_cloudwatch_log_group.redis_engine
+  ]
 }
 
-resource "aws_cloudwatch_log_group" "redis_engine" {
-  name              = "/aws/elasticache/${local.name_prefix}/redis-engine"
-  retention_in_days = 30
-  kms_key_id        = aws_kms_key.data.arn
-
-  tags = {
-    Name = "${local.name_prefix}-redis-engine-logs"
-  }
+output "redis_auth_token" {
+  value     = random_password.redis_auth_token.result
+  sensitive = true
 }
-
