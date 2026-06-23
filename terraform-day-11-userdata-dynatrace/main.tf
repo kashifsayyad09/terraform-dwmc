@@ -1,6 +1,6 @@
 # i wanna add userdata script to this instance, how can i do that?
 resource "aws_instance" "data" {
-  ami                    = "ami-0685bcc683dadb6b9"
+  ami                    = "ami-08f44e8eca9095668"
   instance_type          = "t3.micro"
   vpc_security_group_ids = [aws_security_group.allow_ssh_http.id]
 
