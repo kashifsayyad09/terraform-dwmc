@@ -26,7 +26,7 @@ EOF
 }
 #creating security group for allowing port 22 and 80
 resource "aws_security_group" "allow_ssh" {
-  name        = "allow_ssh_http"
+  name        = "allow_ssh"
   description = "Allow SSH and HTTP traffic"
 
   ingress {
