@@ -2,7 +2,7 @@
 resource "aws_instance" "data" {
   ami                    = "ami-08f44e8eca9095668"
   instance_type          = "t3.micro"
-  vpc_security_group_ids = [aws_security_group.allow_ssh_http.id]
+  vpc_security_group_ids = [aws_security_group.allow_ssh.id]
 
   user_data = <<-EOF
 #!/bin/bash
@@ -25,7 +25,7 @@ EOF
   }
 }
 #creating security group for allowing port 22 and 80
-resource "aws_security_group" "allow_ssh_http" {
+resource "aws_security_group" "allow_ssh" {
   name        = "allow_ssh_http"
   description = "Allow SSH and HTTP traffic"
 
