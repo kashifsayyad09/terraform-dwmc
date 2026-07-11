@@ -1,19 +1,6 @@
-resource "aws_db_subnet_group" "mysql" {
-  name = "mysql-subnet-group"
+resource "aws_db_instance" "mysql2" {
 
-  subnet_ids = [
-    aws_subnet.private1.id,
-    aws_subnet.private2.id
-  ]
-
-  tags = {
-    Name = "mysql-subnet-group"
-  }
-}
-
-resource "aws_db_instance" "mysql" {
-
-  identifier = "mysql-demo"
+  identifier = "mysql-demo-2"
 
   engine         = "mysql"
   engine_version = "8.0"
@@ -24,13 +11,12 @@ resource "aws_db_instance" "mysql" {
   max_allocated_storage = 20
   storage_type          = "gp3"
 
-  db_name  = "mydatabase"
+  db_name  = "mydatabase2"
   username = var.db_username
   password = var.db_password
 
   publicly_accessible = false
-
-  multi_az = false
+  multi_az            = false
 
   db_subnet_group_name = aws_db_subnet_group.mysql.name
 
@@ -38,17 +24,13 @@ resource "aws_db_instance" "mysql" {
     aws_security_group.rds.id
   ]
 
-  skip_final_snapshot = false
-
-  final_snapshot_identifier = "mysql-demo-final"
+  skip_final_snapshot     = false
+  final_snapshot_identifier = "mysql-demo-2-final"
 
   deletion_protection = false
-
-  storage_encrypted = true
+  storage_encrypted   = true
 
   backup_retention_period = 1
-
-  auto_minor_version_upgrade = true
 
   apply_immediately = true
 
@@ -57,8 +39,7 @@ resource "aws_db_instance" "mysql" {
   }
 
   tags = {
-    Name = "FreeTier-MySQL"
+    Name = "mysql-demo-2"
     Environment = "Dev"
   }
 }
-
